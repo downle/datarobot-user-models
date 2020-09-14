@@ -55,9 +55,11 @@ def _read_metadata(code_dir):
 
 def _convert_target_type(unconverted_target_type):
     if unconverted_target_type == "regression":
-        return dr_client.TARGET_TYPE.REGRESSION
+        return dr_client.CUSTOM_MODEL_TARGET_TYPE.REGRESSION
     elif unconverted_target_type == "binary":
-        return dr_client.TARGET_TYPE.BINARY
+        return dr_client.CUSTOM_MODEL_TARGET_TYPE.BINARY
+    elif unconverted_target_type == 'anomaly':
+        return dr_client.CUSTOM_MODEL_TARGET_TYPE.ANOMALY
     raise DrumCommonException("Unsupported target type {}".format(unconverted_target_type))
 
 

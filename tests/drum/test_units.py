@@ -108,6 +108,16 @@ validation:
     modelID=modelID, environmentID=environmentID
 )
 
+anomaly_training_metadata_yaml = """
+name: drumpush-anomaly
+type: training
+targetType: anomaly
+environmentID: {environmentID}
+validation:
+   input: hello 
+""".format(
+    modelID=modelID, environmentID=environmentID
+)
 
 training_metadata_yaml_with_proj = """
 name: drumpush-regression
@@ -224,6 +234,7 @@ def mock_train_model():
         training_metadata_yaml,
         training_metadata_yaml_with_proj,
         inference_metadata_yaml,
+        anomaly_training_metadata_yaml,
     ],
 )
 def test_push(config_yaml):
