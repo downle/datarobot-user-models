@@ -156,7 +156,7 @@ def shared_fit_preprocessing(fit_class):
     # get class order obj from class labels
     class_order = (
         [fit_class.negative_class_label, fit_class.positive_class_label]
-        if fit_class.negative_class_label
+        if fit_class.negative_class_label and fit_class.positive_class_label
         else None
     )
 
