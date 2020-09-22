@@ -48,6 +48,7 @@ def fit(
     Nothing
     """
     # Feel free to delete which ever one of these you aren't using
+    X = X.select_dtypes(exclude=["object"])
     if class_order:
         estimator, optimizer, criterion = build_classifier(X)
         train_classifier(X, y, estimator, optimizer, criterion)

@@ -1,16 +1,18 @@
 import logging
-import numpy
 import os
+
+import numpy
 import pandas as pd
+from rpy2.robjects import r
 
 from datarobot_drum.drum.common import LOGGER_NAME_PREFIX
 from datarobot_drum.drum.exceptions import DrumCommonException
-
 from datarobot_drum.drum.language_predictors.base_language_predictor import BaseLanguagePredictor
 
 logger = logging.getLogger(LOGGER_NAME_PREFIX + "." + __name__)
 
 try:
+    from rpy2.rinterface_lib.embedded import RRuntimeError
     import rpy2.robjects as ro
     from rpy2.robjects import pandas2ri
     from rpy2.robjects.conversion import localconverter
@@ -59,12 +61,28 @@ class RPredictor(BaseLanguagePredictor):
         self._model = r_handler.load_serialized_model(self._custom_model_path)
 
     def predict(self, input_filename):
-        predictions = r_handler.outer_predict(
-            input_filename,
-            model=self._model,
-            positive_class_label=self._positive_class_label,
-            negative_class_label=self._negative_class_label,
-        )
+        try:
+            predictions = r_handler.outer_predict(
+                input_filename,
+                model=self._model,
+                positive_class_label=self._positive_class_label,
+                negative_class_label=self._negative_class_label,
+            )
+        except RRuntimeError as e:
+            try:
+                e.context = {
+                    # :kludge: Have to use `unlist` because `traceback`
+                    #   returns a pairlist, which rpy2 doesn't know how
+                    #   to repr.
+                    "r_traceback": "\n".join(r("unlist(traceback())"))
+                }
+            except Exception as traceback_exc:
+                e.context = {
+                    "r_traceback": "(an error occurred while getting traceback from R)",
+                    "r_traceback_err": traceback_exc,
+                }
+
+            raise
         with localconverter(ro.default_converter + pandas2ri.converter):
             py_df = ro.conversion.rpy2py(predictions)
 

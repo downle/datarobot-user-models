@@ -1,12 +1,9 @@
 import logging
 
-import pandas as pd
-
-from datarobot_drum.drum.common import LOGGER_NAME_PREFIX
-from datarobot_drum.drum.common import RunLanguage
-from datarobot_drum.drum.exceptions import DrumCommonException
-
 from mlpiper.components.connectable_component import ConnectableComponent
+
+from datarobot_drum.drum.common import LOGGER_NAME_PREFIX, RunLanguage
+from datarobot_drum.drum.exceptions import DrumCommonException
 
 
 class GenericPredictorComponent(ConnectableComponent):

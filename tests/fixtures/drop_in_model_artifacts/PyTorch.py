@@ -80,7 +80,7 @@ if __name__ == "__main__":
     from PyTorch import BinModel, RegModel
 
     BINARY_DATA = "iris_binary_training.csv"
-    REGRESSION_DATA = "boston_housing.csv"
+    REGRESSION_DATA = "DR_Demo_Telecomms_Churn.csv"
 
     bin_X = pd.read_csv(BINARY_DATA)
     bin_y = bin_X.pop("Species")
